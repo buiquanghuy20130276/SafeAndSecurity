@@ -46,6 +46,32 @@ public class Order implements Serializable {
         this.updateDate = updateDate;
         this.orderDetails= new LinkedList<>();
     }
+    public String getDataToSign(){
+        StringBuilder data = new StringBuilder();
+        data.append(orderID);
+        data.append(userID);
+        data.append(fullName);
+        data.append(totalPrice);
+        data.append(address);
+        data.append(phone);
+        data.append(email);
+        data.append(status);
+        data.append(createDate);
+        data.append(updateDate);
+
+        // Thêm các thuộc tính của từng chi tiết đơn hàng
+        if (orderDetails != null) {
+            for (OrderDetail detail : orderDetails) {
+                data.append(detail.getProductID());
+                data.append(detail.getNameProduct());
+                data.append(detail.getPriceProduct());
+                data.append(detail.getProductQuantity());
+                data.append(detail.getTotalPrice());
+            }
+        }
+
+        return data.toString();
+    }
 
     public String getOrderID() {
         return orderID;

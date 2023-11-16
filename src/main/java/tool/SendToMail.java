@@ -14,10 +14,13 @@ public class SendToMail {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.debug", "true");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
         String email_Admin = "buiquanghuy0029a@gmail.com";
         String user_Admin = "TrueMart gach men cao cap";
-        String password = "xarryhegmxijvkju";
+        String password = "dkhlcpmfzykinshm";
         Session session = Session.getInstance(props,
                 new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -43,6 +46,7 @@ public class SendToMail {
     }
 
     public static void main(String[] args) {
+        SendToMail.sendEmail("quanghuy0029a@gmail.com","test","<button>click</button>");
     }
 
 }

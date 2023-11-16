@@ -2,7 +2,9 @@ package controller;
 
 import bean.User;
 import service.UserService;
+import tool.DSA;
 import tool.MD5;
+import tool.SendToMail;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.KeyPair;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Random;
 
@@ -33,9 +37,13 @@ public class Register extends HttpServlet {
         String phone = request.getParameter("phone");
         String pass = request.getParameter("password");
         Random rd = new Random();
-        Timestamp timestamp = new Timestamp(new Date().getTime());
-        String timeRegister = String.valueOf(timestamp);
 
+        String timeRegister = String.valueOf(LocalDate.now());
+        DSA dsa = new DSA();
+        KeyPair keyPair = dsa.generateKeyPair();
+
+
+        String publickey = dsa.encodeToBase64(keyPair.getPrivate().getEncoded());
         User user = new User();
         user.setIdUser("user" + rd.nextInt(1000000) + rd.nextInt(100000));
         user.setName(name);
@@ -45,6 +53,7 @@ public class Register extends HttpServlet {
         user.setPassWord(MD5.getMd5(pass));
         user.setPhone(phone);
         user.setIsAdmin(0);
+        user.setPublicKey(publickey);
         user.setStatus(1);
         UserService us = new UserService();
 
@@ -53,10 +62,11 @@ public class Register extends HttpServlet {
                 request.setAttribute("msg", "Vui lòng điền đầy đủ thông tin");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
-            if (agree==null) {
+            if (agree == null) {
                 request.setAttribute("msg", "Vui lòng chấp nhận điều khoảng");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
-            }if (UserService.existUserName(uname)) {
+            }
+            if (UserService.existUserName(uname)) {
                 request.setAttribute("msg", "Tên đăng nhập đã tồn tại");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
@@ -64,6 +74,9 @@ public class Register extends HttpServlet {
                 request.setAttribute("msg", "Email này đã được đăng ký tài khoảng");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             } else if (UserService.register(user)) {
+                String subject = "Đăng ký tài khoản";
+                String message = "Đây là khóa bí mật của bạn, Vui lòng không ai biết thông tin về khóa này:\n" +publickey;
+                SendToMail.sendEmail(email, subject, message);
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             } else {
                 request.setAttribute("msg", "Tạo tài khoản thất bại.<br> Hãy thử lại!!!");
@@ -72,5 +85,15 @@ public class Register extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        DSA dsa = new DSA();
+        KeyPair keyPair = dsa.generateKeyPair();
+//        System.out.println("hhhh");
+        System.out.println(dsa.encodeToBase64(keyPair.getPublic().getEncoded()));
+        User user =  new User("user10000000", "quahuysuper", "buiquanghuy0029a@gmail.com", "212002", 1, "Bùi Quang Huy", "0981722033", 1, String.valueOf(LocalDate.now()),dsa.encodeToBase64(keyPair.getPublic().getEncoded()));
+
+        UserService.register(user);
     }
 }

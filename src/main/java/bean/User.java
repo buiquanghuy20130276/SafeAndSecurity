@@ -12,11 +12,11 @@ public class User implements Serializable {
     private String phone;
 
     private int status;
-    private String privateKey;
     private String day_register;
 
 
     private Role role;
+    private String publicKey;
 
     public User() {
     }
@@ -33,7 +33,7 @@ public class User implements Serializable {
         this.day_register = day_register;
     }
 
-    public User(String idUser, String userName, String email, String passWord, int isAdmin, String name, String phone, int status, String privateKey, String day_register, Role role) {
+    public User(String idUser, String userName, String email, String passWord, int isAdmin, String name, String phone, int status, String day_register, String publicKey) {
         this.idUser = idUser;
         this.userName = userName;
         this.email = email;
@@ -42,9 +42,16 @@ public class User implements Serializable {
         this.name = name;
         this.phone = phone;
         this.status = status;
-        this.privateKey = privateKey;
         this.day_register = day_register;
-        this.role = role;
+        this.publicKey = publicKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 
     @Override
@@ -58,19 +65,11 @@ public class User implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", status=" + status +
-                ", privateKey='" + privateKey + '\'' +
                 ", day_register='" + day_register + '\'' +
                 ", role=" + role +
                 '}';
     }
 
-    public String getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
-    }
 
     public String getIdUser() {
         return idUser;

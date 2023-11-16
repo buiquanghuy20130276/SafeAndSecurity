@@ -68,6 +68,25 @@ public class UserService {
         }
         return user;
     }
+    public static String getPublicKey(String id) {
+        PreparedStatement s = null;
+        String  publickey= "";
+        try {
+            String sql = "SELECT k.publickey FROM `user` u JOIN `public_key` k ON u.id_publickey = k.id WHERE u.id=?";
+            s = ConnectDB.connect(sql);
+            s.setString(1, id);
+            ResultSet rs = s.executeQuery();
+            rs.first();
+            publickey = rs.getString(1);
+            rs.close();
+            s.close();
+
+        } catch (ClassNotFoundException |
+                 SQLException e) {
+            e.printStackTrace();
+        }
+        return publickey;
+    }
 
     public static boolean existUserName(String uname) {
         PreparedStatement s = null;
@@ -84,35 +103,11 @@ public class UserService {
         return false;
     }
 
-    public static boolean addUser(User user) {
-        PreparedStatement preSta = null;
-        Random rd = new Random();
-        try {
-            String sql = "INSERT INTO user VALUES (?,?,?,?,?,?,?,?,?);";
-            preSta = ConnectDB.connect(sql);
-            preSta.setString(1, user.getIdUser());
-            preSta.setString(2, user.getUserName());
-            preSta.setString(3, user.getEmail());
-            preSta.setString(4, user.getPassWord());
-            preSta.setInt(5, user.getIsAdmin());
-            preSta.setString(6, user.getName());
-            preSta.setString(7, user.getPhone());
-            preSta.setInt(8, user.getStatus());
-            preSta.setString(9, user.getDay_register());
-            int rs = preSta.executeUpdate();
-            preSta.close();
-            return true;
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public static boolean register(User user) {
         PreparedStatement preSta = null;
         Random rd = new Random();
         try {
-            String sql = "INSERT INTO user(id,username,email,password,role,name,phone,status,day_register) VALUES (?,?,?,?,?,?,?,?,?);";
+            String sql = "INSERT INTO user(id,username,email,password,role,name,phone,status,day_register,publickey) VALUES (?,?,?,?,?,?,?,?,?,?);";
             preSta = ConnectDB.connect(sql);
             preSta.setString(1, "user" + rd.nextInt(1000000) + rd.nextInt(100000));
             preSta.setString(2, user.getUserName());
@@ -123,6 +118,7 @@ public class UserService {
             preSta.setString(7, user.getPhone());
             preSta.setInt(8, user.getStatus());
             preSta.setString(9, user.getDay_register());
+            preSta.setString(10,user.getPublicKey());
             int rs = preSta.executeUpdate();
             preSta.close();
             return true;
@@ -212,43 +208,8 @@ public class UserService {
     }
 
 
-    public static boolean checkUsernameEmail(String userName, String email) {
-        PreparedStatement preSta = null;
-        try {
-            String sql = "select username,email from user where username=? and email =?";
-            preSta = ConnectDB.connect(sql);
-            preSta.setString(1, userName);
-            preSta.setString(2, email);
-            ResultSet rs = preSta.executeQuery();
-            if (rs.next()) {
-                rs.getString(2);
-                rs.getString(3);
-                return true;
-            }
-            rs.close();
-            preSta.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
 
-    public int countUser() {
-        PreparedStatement pre = null;
-        int count = 0;
-        try {
-            String sql = "SELECT * FROM user";
-            pre = ConnectDB.connect(sql);
-            ResultSet rs = pre.executeQuery();
-            rs.last();
-            count = rs.getRow();
-            return count;
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-        return count;
-    }
 
     // tìm kiếm theo tên sản phẩm
 
@@ -357,14 +318,19 @@ public class UserService {
         return res;
     }
     public static void main(String[] args) {
-        UserService service = new UserService();
-        boolean u = existUserName("quanghuy.fs");
-        User user = new User("user10000000", "quahuysuper", "qy0029a@gmail.com", "212002", 1, "Bùi Quang Huy", "0981722033", 1, "12/12/2002");
-//        register(user);
-        System.out.println(getByIdUser("user65428064694"));
+//        UserService service = new UserService();
+//        boolean u = existUserName("quanghuy.fs");
+//        User user = new User("user10000000", "quahuysuper", "qy0029a@gmail.com", "212002", 1, "Bùi Quang Huy", "0981722033", 1, "12/12/2002","jhcjgcyc");
+//        System.out.println(register(user));
+//        System.out.println(getByIdUser("use
+//        r65428064694"));
 //        System.out.println(u);
 //        System.out.println(register(user));
 //        UserService u = new UserService();
 //        System.out.println(u.register(new User("2","trung2", "trung2@gmail.com", "0912271440", "đl" , "1234")));
+//        System.out.println(
+//                checkUser("admin",MD5.getMd5("123"))
+//        );
+        System.out.println(getPublicKey("sdsdg"));
     }
 }
