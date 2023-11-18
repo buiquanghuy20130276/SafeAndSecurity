@@ -5,10 +5,8 @@ import bean.OrderDetail;
 import bean.Product;
 import database.ConnectDB;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -43,6 +41,35 @@ public class OrderService {
         }
         return listOrder;
     }
+    public static Order getOrder(String id) {
+         Order order = null;
+        PreparedStatement pState = null;
+        String sql = "SELECT * FROM `order` where id =? ";
+        try {
+            pState = ConnectDB.connect(sql);
+            pState.setString(1, id);
+            ResultSet rs = pState.executeQuery();
+            if (rs.next()) {
+                 order = new Order(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getString(9),
+                        rs.getString(10));
+            }
+            rs.close();
+            pState.close();
+
+        } catch (SQLException|ClassNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        return order;
+    }
     public static List<OrderDetail> getOrderNotDeliver(String id) {
             PreparedStatement s = null;
             try {
@@ -70,24 +97,43 @@ public class OrderService {
                 return new LinkedList<>();
             }
         }
-    public static void insertOrder(String userID, String username, int priceTotal,
-                            String address, String phone,String email){
+    public static byte[] getSignature(String idOder) {
+        PreparedStatement s = null;
+        byte[] signatureBytes = null;
+        try {
+            String sql = "SELECT signature FROM `order` WHERE id=?;";
+            s = ConnectDB.connect(sql);
+            s.setString(1, idOder);
+            ResultSet rs = s.executeQuery();
+            if (rs.next()) {
+                Blob signatureBlob = rs.getBlob("signature");
+                signatureBytes = signatureBlob.getBytes(1, (int) signatureBlob.length());
+
+            }
+            rs.close();
+            s.close();
+            return signatureBytes;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static void insertOrder(Order order){
         PreparedStatement ps = null;
         try{
-            String sql = "insert into `order`values (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into `order`values (?,?,?,?,?,?,?,?,?,?,?)";
             ps = ConnectDB.connect(sql);
-            Random rd = new Random();
-            String idOrder="order"+rd.nextInt(1000000000)+rd.nextInt(1000000);
-            ps.setString(1, idOrder);
-            ps.setString(2, userID);
-            ps.setString(3, username);
-            ps.setInt(4, priceTotal);
-            ps.setString(5, address);
-            ps.setString(6, phone);
-            ps.setString(7, email);
+            ps.setString(1, order.getOrderID());
+            ps.setString(2, order.getUserID());
+            ps.setString(3, order.getFullName());
+            ps.setInt(4, order.getTotalPrice());
+            ps.setString(5, order.getAddress());
+            ps.setString(6, order.getPhone());
+            ps.setString(7, order.getEmail());
             ps.setInt(8, 0);
             ps.setDate(9, Date.valueOf(java.time.LocalDate.now()));
             ps.setDate(10, Date.valueOf(java.time.LocalDate.now()));
+            ps.setDate(11, null);
             ps.executeUpdate();
             ps.close();
 
@@ -102,12 +148,17 @@ public class OrderService {
     }
 
 
-    public static void updateStatus(String id){
+    public static void updateSignature(String id,byte[]signature){
         PreparedStatement s = null;
         try {
-            String sql = "update `order` set status = 1 where id = ?";
+            String sql = "update `order` set signature = ? where id = ?";
             s = ConnectDB.connect(sql);
-            s.setString(1,id);
+            Blob signatureBlob = s.getConnection().createBlob();
+            signatureBlob.setBytes(1, signature);
+
+            // Đặt giá trị Blob vào câu lệnh SQL
+            s.setBlob(1, signatureBlob);
+            s.setString(2, id);
             int rs = s.executeUpdate();
             s.close();
 
@@ -147,6 +198,9 @@ public class OrderService {
 
     public static void main(String[] args) {
 //        deleteOrder("1324653113234");
-        insertOrder("admin","unaghuy",45554545,"binhduong","134910843","@gmail");
+//        Order order = new Order("uidahf","user32915610645","unaghuy",45554545,"binhduong","134910843","@gmail");
+//        insertOrder(order);
+        System.out.println(getOrder("order308026691231982").toString());
+//        System.out.println(Base64.getEncoder().encodeToString(getSignature("order308026691231982")));
     }
 }
