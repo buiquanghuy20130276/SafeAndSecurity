@@ -1,8 +1,11 @@
 package service;
 
+import bean.Order;
 import bean.OrderDetail;
 import bean.Product;
+import controller.UpdateOrder;
 import database.ConnectDB;
+import tool.DSA;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,18 +99,15 @@ public class OrderDetailService {
             rs.close();
             ps.close();
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
             return null;
-        } catch (ClassNotFoundException classNotFoundException) {
-            classNotFoundException.printStackTrace();
-            return null;
         }
+
     }
 
-    public static void insertOrderDetail(List<Product> p) {
+    public static void insertOrderDetail(List<Product> p,String idOrder) {
         PreparedStatement ps = null;
-        String orderID = getIdOrder();
         try {
             String sql = "insert into order_detail values (?,?,?,?)";
             ps = ConnectDB.connect(sql);
@@ -115,7 +115,7 @@ public class OrderDetailService {
             for (int i = 0; i < p.size(); i++) {
                 Product product = p.get(i);
                 ps.setString(1, product.getProductID());
-                ps.setString(2, orderID);
+                ps.setString(2, idOrder);
                 ps.setInt(3, product.getQuantityCart());
                 ps.setInt(4, ((int) (product.getPriceAfterSale() * product.getQuantityCart())));
                 ps.executeUpdate();
@@ -155,26 +155,21 @@ public class OrderDetailService {
         }
     }
 
-    public static void main(String[] args) {
-//        System.out.println(getDetailOrder("13246531132342"));
-//        System.out.println(getIdOrder());
-//        Product p = new Product("sp35945", "Gạch bông F2118", "Gạch bông F2118 là sản phẩm gạch quen thuộc với người Việt Nam, được ứng dụng nhiều trong những không gian bếp, nhà vệ sinh, mảng miếng trang trí bởi tính thẩm mỹ, dễ phối màu, dễ lau " +
-//                "chùi bụi bẩn. Khi bạn cần gạch ốp bếp, gạch ốp lát trang trí không gian quán cafe, sapa, ốp lát nhà tắm thì gạch bông men sẽ là 1 lựa chọn đầy thú vị cho ngôi nhà của bạn.", "200x200", "Gạch lát nền, Gạch ốp tường", 358000, 47,
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-view.jpg",
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-map.jpg", 189, 1, 1, 1);
-//        Product p2 = new Product("sp31594", "Gạch bông F2118", "Gạch bông F2118 là sản phẩm gạch quen thuộc với người Việt Nam, được ứng dụng nhiều trong những không gian bếp, nhà vệ sinh, mảng miếng trang trí bởi tính thẩm mỹ, dễ phối màu, dễ lau " +
-//                "chùi bụi bẩn. Khi bạn cần gạch ốp bếp, gạch ốp lát trang trí không gian quán cafe, sapa, ốp lát nhà tắm thì gạch bông men sẽ là 1 lựa chọn đầy thú vị cho ngôi nhà của bạn.", "200x200", "Gạch lát nền, Gạch ốp tường", 358000, 47,
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-view.jpg",
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-map.jpg", 189, 1, 1, 1);
-//        Product p3 = new Product("sp15945", "Gạch bông F2118", "Gạch bông F2118 là sản phẩm gạch quen thuộc với người Việt Nam, được ứng dụng nhiều trong những không gian bếp, nhà vệ sinh, mảng miếng trang trí bởi tính thẩm mỹ, dễ phối màu, dễ lau " +
-//                "chùi bụi bẩn. Khi bạn cần gạch ốp bếp, gạch ốp lát trang trí không gian quán cafe, sapa, ốp lát nhà tắm thì gạch bông men sẽ là 1 lựa chọn đầy thú vị cho ngôi nhà của bạn.", "200x200", "Gạch lát nền, Gạch ốp tường", 358000, 47,
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-view.jpg",
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-map.jpg", 189, 1, 1, 1);
-//        List<Product> list = new ArrayList<>();
-//        list.add(p);
-//        list.add(p2);
-//        list.add(p3);
-//        insertOrderDetail(list);
-            System.out.println(getDetailOrder("order178892416887043").toString());
+    public static void main(String[] args) throws Exception {
+//
+        DSA dsa = new DSA();
+//        List<Order> list= OrderService.getAllOrder();
+//        for (Order o: list){
+//            o.setOrderDetails(getDetailOrder(o.getOrderID()));
+//        }
+//        for (Order o : list){
+//            System.out.println(o.toString());
+//        }
+        Order order = OrderService.getOrder("order308026691231982");
+        order.setOrderDetails(getDetailOrder("order308026691231982"));
+        order.setSignature(OrderService.getSignature("order308026691231982"));
+        System.out.println(dsa.verifySignature(order.getDataToSign(),order.getSignature(),dsa.stringToPublicKey("MIIBSwIBADCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoEFgIUaGeUn1XFE6j8Fqc8tjog/7LgXZc=")));
+//        Order o = OrderService.ge
+//            System.out.println(getDetailOrder("order308026691231982").toString());
     }
 }

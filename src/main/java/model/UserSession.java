@@ -33,6 +33,14 @@ public class UserSession {
         }
         return s.trim();
     }
+    public String getPublickey(){
+        String s = "";
+        Collection<User> u = user.values();
+        for(User s2 : u){
+            s +=  s2.getPublicKey();
+        }
+        return s.trim();
+    }
     public String getUserId(){
         String s = "";
         Collection<User> u = user.values();

@@ -103,6 +103,12 @@
                                         <input type="text" name="phone" placeholder="">
                                     </div>
                                 </div>
+                                <div class="col-md-6" style="margin-top: 20px">
+                                    <div class="checkout-form-list mb-30">
+                                        <label> Private key <span class="required">*</span></label>
+                                        <input type="text" name="privatekey" placeholder="">
+                                    </div>
+                                </div>
 
 
                             </div>
