@@ -19,26 +19,24 @@ public class ListOrder extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        UserSession u = (UserSession) request.getSession().getAttribute("user");
+        HttpSession session = request.getSession();
+        UserSession u = UserSession.getUS(session);
         DSA dsa = new DSA();
         if (u == null) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             List<Order> listOrder = OrderService.getAllOrder();
             for (Order o : listOrder) {
-                o.setSignature(OrderService.getSignature(o.getOrderID()));
                 o.setOrderDetails(OrderDetailService.getDetailOrder(o.getOrderID()));
             }
-//            for (Order o : listOrder){
-//
-//                try {
-//                    if(dsa.verifySignature(o.getDataToSign(),dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(u.getPublickey()))){
-//                        request.setAttribute(o.getOrderID(),"true");
-//                    }
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
+//            System.out.println(u.getPublickey());
+            for (Order o : listOrder){
+
+                    if(dsa.verifySignature(o.getDataToSign(),dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(u.getPublickey()))){
+                        request.setAttribute(o.getOrderID(),"true");
+                    }
+
+            }
             request.setAttribute("listO", listOrder);
             request.getRequestDispatcher("admin/ManageOrder.jsp").forward(request, response);
         }

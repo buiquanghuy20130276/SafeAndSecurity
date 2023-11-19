@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<% UserSession u = UserSession.getUS(session);
+<% UserSession u = UserSession.getUS((HttpSession) session);
     int role = u.getRole();
 %>
 <jsp:useBean id="cart" class="model.Cart" scope="session"></jsp:useBean>
