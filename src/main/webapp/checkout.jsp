@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--@elvariable id="cart" type="model.Cart"--%>
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html >
 
 <head>
     <meta charset="utf-8">
@@ -75,7 +75,7 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="checkbox-form mb-sm-40">
                         <h3>Chi tiết thanh toán</h3>
-                        <form action="CreateOrder" method="get">
+                        <form action="CreateOrder" accept-charset="UTF-8" method="get">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="checkout-form-list mb-30">
@@ -106,7 +106,7 @@
                                 <div class="col-md-6" style="margin-top: 20px">
                                     <div class="checkout-form-list mb-30">
                                         <label> Private key <span class="required">*</span></label>
-                                        <input type="text" name="privatekey" placeholder="">
+                                        <input type="text" name="private">
                                     </div>
                                 </div>
 

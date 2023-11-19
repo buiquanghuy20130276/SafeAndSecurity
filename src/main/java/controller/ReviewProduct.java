@@ -21,6 +21,9 @@ public class ReviewProduct extends HttpServlet {
     @Override
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         List<Reviews> listReview = ReviewService.getAllReviewProduct();
         request.setAttribute("listReview", listReview);
         String username = request.getParameter("username");

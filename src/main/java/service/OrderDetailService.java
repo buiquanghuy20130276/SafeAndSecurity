@@ -106,7 +106,7 @@ public class OrderDetailService {
 
     }
 
-    public static void insertOrderDetail(List<Product> p,String idOrder) {
+    public static void insertOrderDetail(List<Product> p, String idOrder) {
         PreparedStatement ps = null;
         try {
             String sql = "insert into order_detail values (?,?,?,?)";
@@ -141,6 +141,7 @@ public class OrderDetailService {
             e.printStackTrace();
         }
     }
+
     public static void deleteHistory(String id) {
         PreparedStatement s = null;
         try {
@@ -165,11 +166,13 @@ public class OrderDetailService {
 //        for (Order o : list){
 //            System.out.println(o.toString());
 //        }
-        Order order = OrderService.getOrder("order308026691231982");
-        order.setOrderDetails(getDetailOrder("order308026691231982"));
-        order.setSignature(OrderService.getSignature("order308026691231982"));
-        System.out.println(dsa.verifySignature(order.getDataToSign(),order.getSignature(),dsa.stringToPublicKey("MIIBSwIBADCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoEFgIUaGeUn1XFE6j8Fqc8tjog/7LgXZc=")));
-//        Order o = OrderService.ge
-//            System.out.println(getDetailOrder("order308026691231982").toString());
+        Order order = OrderService.getOrder("order219309140920040");
+        order.setOrderDetails(getDetailOrder("order219309140920040"));
+        System.out.println(order.getDataToSign());
+//        order.setSignature(dsa.encodeToBase64(dsa.signData(order.getDataToSign(), dsa.stringToPrivateKey("MIIBSwIBADCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoEFgIUHG17oxZ/PqtBe5KIihzX4VuUtLs="))));
+//        System.out.println(order.getSignature());
+        System.out.println(dsa.verifySignature(order.getDataToSign(), dsa.decodeFromBase64(order.getSignature()), dsa.stringToPublicKey("MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAYxmSOXXEqObHMQUpIIy0kVzgl+f4cS921BC6qG2Q9Y2x5pztHcBw58NL3qaxPoqBITZsLg+4DD1msxcTy27KaS6wLaM7kqnczl5x2vY1GZMs6r+2V8JGYwFWgSLPoNWOlN9nmYrmlxNCrPWtITFtPvKQJaL/MDTu422QnaVM7V4=")));
+    //order105426654396020user92041998898binhduong1848000981722033quanghuy0029a@gmail.comnullnullsp009G?ch th? TA0312M1848001184800
+        //order5307477933771user92041998898adsfasd240000+84981722033quanghuy0029a@gmail.comnullnullsp003Baked brick2400001240000
     }
 }

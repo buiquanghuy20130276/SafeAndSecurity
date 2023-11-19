@@ -13,6 +13,9 @@ import java.util.List;
 public class ListProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         List<Product>list = ProductService.getAllProduct();
         int page,show=12;
         int size = list.size();;
