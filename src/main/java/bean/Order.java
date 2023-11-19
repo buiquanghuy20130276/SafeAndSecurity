@@ -15,7 +15,7 @@ public class Order implements Serializable {
     private int status;
     private String createDate;
     private String updateDate;
-    private byte[] signature;
+    private String signature;
     private List<OrderDetail> orderDetails;
 
     @Override
@@ -31,11 +31,10 @@ public class Order implements Serializable {
                 ", status=" + status +
                 ", createDate='" + createDate + '\'' +
                 ", updateDate='" + updateDate + '\'' +
+                ", signature='" + signature + '\'' +
+                ", orderDetails=" + orderDetails +
                 '}';
     }
-
-
-
 
     public Order(String orderID, String userID, String fullName, int totalPrice, String address, String phone, String email) {
         this.orderID = orderID;
@@ -60,7 +59,7 @@ public class Order implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public Order(String orderID, String userID, String fullName, int totalPrice, String address, String phone, String email, int status, String createDate, String updateDate, byte[] signature, List<OrderDetail> orderDetails) {
+    public Order(String orderID, String userID, String fullName, int totalPrice, String address, String phone, String email, int status, String createDate, String updateDate, String signature) {
         this.orderID = orderID;
         this.userID = userID;
         this.fullName = fullName;
@@ -72,14 +71,13 @@ public class Order implements Serializable {
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.signature = signature;
-        this.orderDetails = orderDetails;
     }
 
-    public byte[] getSignature() {
+    public String getSignature() {
         return signature;
     }
 
-    public void setSignature(byte[] signature) {
+    public void setSignature(String signature) {
         this.signature = signature;
     }
 
@@ -87,11 +85,10 @@ public class Order implements Serializable {
         StringBuilder data = new StringBuilder();
         data.append(orderID);
         data.append(userID);
-        data.append(totalPrice);
         data.append(address);
+        data.append(totalPrice);
         data.append(phone);
         data.append(email);
-        data.append(status);
         data.append(createDate);
         data.append(updateDate);
 
@@ -102,7 +99,6 @@ public class Order implements Serializable {
                 data.append(detail.getNameProduct());
                 data.append(detail.getPriceProduct());
                 data.append(detail.getProductQuantity());
-                data.append(detail.getTotalPrice());
             }
         }
 

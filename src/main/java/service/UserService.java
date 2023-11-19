@@ -269,7 +269,8 @@ public class UserService {
                         rs.getString(6),
                         rs.getString(7),
                         rs.getInt(8),
-                        rs.getString(9)
+                        rs.getString(9),
+                        rs.getString(10)
                 );
                 return user;
             }
@@ -313,5 +314,6 @@ public class UserService {
 //                checkUser("admin",MD5.getMd5("123"))
 //        );
 //        System.out.println(getPublicKey("sdsdg"));
+        System.out.println(getUser("quanghuyfs").toString());;
     }
 }

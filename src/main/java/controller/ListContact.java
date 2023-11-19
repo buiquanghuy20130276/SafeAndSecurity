@@ -14,6 +14,9 @@ import java.util.List;
 public class ListContact extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         List<Contact> listC = ContactService.getAll();
         request.setAttribute("listC", listC);
         request.getRequestDispatcher("admin/ManageContact.jsp").forward(request, response);

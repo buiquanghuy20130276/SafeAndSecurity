@@ -29,7 +29,8 @@ public class OrderService {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getString(10));
+                        rs.getString(10),
+                        rs.getString(11));
                 listOrder.add(order);
             }
             rs.close();
@@ -59,7 +60,8 @@ public class OrderService {
                         rs.getString(7),
                         rs.getInt(8),
                         rs.getString(9),
-                        rs.getString(10));
+                        rs.getString(10),
+                         rs.getString(11));
             }
             rs.close();
             pState.close();
@@ -97,22 +99,21 @@ public class OrderService {
                 return new LinkedList<>();
             }
         }
-    public static byte[] getSignature(String idOder) {
+    public static String getSignature(String idOder) {
         PreparedStatement s = null;
-        byte[] signatureBytes = null;
+        String signature ="";
         try {
             String sql = "SELECT signature FROM `order` WHERE id=?;";
             s = ConnectDB.connect(sql);
             s.setString(1, idOder);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                Blob signatureBlob = rs.getBlob("signature");
-                signatureBytes = signatureBlob.getBytes(1, (int) signatureBlob.length());
+                signature = rs.getString(1);
 
             }
             rs.close();
             s.close();
-            return signatureBytes;
+            return signature;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             return null;
@@ -130,9 +131,9 @@ public class OrderService {
             ps.setString(5, order.getAddress());
             ps.setString(6, order.getPhone());
             ps.setString(7, order.getEmail());
-            ps.setInt(8, 0);
-            ps.setDate(9, Date.valueOf(java.time.LocalDate.now()));
-            ps.setDate(10, Date.valueOf(java.time.LocalDate.now()));
+            ps.setInt(8, order.getStatus());
+            ps.setDate(9, Date.valueOf(order.getCreateDate()));
+            ps.setDate(10, Date.valueOf(order.getUpdateDate()));
             ps.setDate(11, null);
             ps.executeUpdate();
             ps.close();
@@ -148,16 +149,15 @@ public class OrderService {
     }
 
 
-    public static void updateSignature(String id,byte[]signature){
+    public static void updateSignature(String id,String signature){
         PreparedStatement s = null;
         try {
             String sql = "update `order` set signature = ? where id = ?";
             s = ConnectDB.connect(sql);
-            Blob signatureBlob = s.getConnection().createBlob();
-            signatureBlob.setBytes(1, signature);
+
 
             // Đặt giá trị Blob vào câu lệnh SQL
-            s.setBlob(1, signatureBlob);
+            s.setString(1, signature);
             s.setString(2, id);
             int rs = s.executeUpdate();
             s.close();

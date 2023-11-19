@@ -26,11 +26,11 @@
     <!--[if lte IE 8]>
     <script language="javascript" type="text/javascript" src="vendors/flot/excanvas.min.js"></script><![endif]-->
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="admin/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
@@ -77,7 +77,8 @@
                                     <th>Tổng đơn hàng</th>
                                     <th>Ngày đặt</th>
                                     <th>Trạng thái</th>
-                                    <th colspan="4"></th>
+                                    <th>Xác minh</th>
+                                    <th colspan="3"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -92,26 +93,28 @@
                                         <td>${o.createDate}</td>
                                         <td id="orderstatus"><c:if test="${o.status ==1}">Đã xử lý</c:if>
                                             <c:if test="${o.status ==0}">Chưa xử lý</c:if></td>
-                                        <td id="rowupdate"><c:if test="${o.status ==1}"></c:if>
-                                            <c:if test="${o.status ==0}"><a type="button" class="btn btn-primary"
-                                                                            id="linkupdate"
-                                                                            href="UpdateOrder?action=update&id=${o.orderID}">
-                                                <span class="fas fa-shipping-fast"></span> Xử lý</a></c:if></td>
-                                        <td><a type="button" class="btn btn-success"
-                                               href="ListOrderDetailAd?id=${o.orderID}&fullName=${o.fullName}&address=${o.address}&phone=${o.phone}&createDate=${o.createDate}&total=${o.totalPrice}">
-                                            <span class="fas fa-address-book"></span> Xem chi tiết</a></td>
-
-                                        <td>
+                                        <td style="text-align: center;">
                                             <c:choose>
                                                 <c:when test="${not empty requestScope[o.orderID] and requestScope[o.orderID] eq 'true'}">
-                                                    Đã xác minh
+                                                    <span class="fa fa-check" style="font-size: 40px;color: green"></span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    Không thể xác minh
+                                                    <span class="fa fa-close"  style="font-size: 40px;color: red"></span>
+
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td><a type="button" id="btn-delete" href="UpdateOrder?action=delete&id=${o.orderID}" class="btn btn-danger"> Xóa</a></td>
+                                        <td style="text-align: center"  id="rowupdate"><c:if test="${o.status ==1}"></c:if>
+                                            <c:if test="${o.status ==0}"><a type="button" class="btn btn-primary"
+                                                                            id="linkupdate"
+                                                                            href="UpdateOrder?action=update&id=${o.orderID}">
+                                                 Xử lý</a></c:if></td>
+                                        <td style="text-align: center"><a type="button" class="btn btn-success"
+                                               href="ListOrderDetailAd?id=${o.orderID}&fullName=${o.fullName}&address=${o.address}&phone=${o.phone}&createDate=${o.createDate}&total=${o.totalPrice}">
+                                             Xem chi tiết</a></td>
+
+
+                                        <td style="text-align: center"><a type="button" id="btn-delete" href="UpdateOrder?action=delete&id=${o.orderID}" class="btn btn-danger"> Xóa</a></td>
 
                                     </tr>
                                     <%--                                    href="UpdateOrder?action=delete&id=${o.orderID}"--%>
