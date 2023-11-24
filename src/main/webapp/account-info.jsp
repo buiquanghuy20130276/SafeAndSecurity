@@ -44,6 +44,7 @@
 
     <!-- Modernizer js -->
     <script src="js\vendor\modernizr-3.5.0.min.js"></script>
+
 </head>
 
 <body>
@@ -77,22 +78,27 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="checkout-form-list mb-30">
-                                    <p><span class="title-s"><strong>Mã khác hàng:</strong> </span> <span>${user.idUser}</span></p>
+                                    <p><span class="title-s"><strong>Mã khác hàng:</strong> </span> <span
+                                    >${user.idUser}</span></p>
+
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="checkout-form-list mb-30">
-                                    <p><span class="title-s"><strong>Tên khách hàng:</strong> </span> <span>${user.name}</span></p>
+                                    <p><span class="title-s"><strong>Tên khách hàng:</strong> </span>
+                                        <span>${user.name}</span></p>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="checkout-form-list mb-30">
-                                    <p><span class="title-s"><strong>SĐT:</strong> </span> <span>${user.phone}</span></p>
+                                    <p><span class="title-s"><strong>SĐT:</strong> </span> <span>${user.phone}</span>
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="checkout-form-list mb-30">
-                                    <p><span class="title-s"><strong>Email:</strong> </span> <span>${user.email}</span></p>
+                                    <p><span class="title-s"><strong>Email:</strong> </span> <span>${user.email}</span>
+                                    </p>
                                 </div>
                             </div>
 
@@ -100,7 +106,8 @@
                         <div class="different-address">
                             <div class="order-notes">
                                 <div class="checkout-form-list">
-                                    <p><span class="title-s"><strong>Ngày đăng ký:</strong> </span> <span>${user.day_register}</span></p>
+                                    <p><span class="title-s"><strong>Ngày đăng ký:</strong> </span>
+                                        <span>${user.day_register}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -165,6 +172,55 @@
                             </c:if>
                         </div>
                     </div>
+                </div>
+            </div>
+            <%
+                Boolean existEmail = (Boolean) request.getAttribute("existEmail");
+            %>
+            <div class="container mt-3">
+                <button class="btn btn-primary" onclick="showConfirmationPopup()">Cập nhật khóa mới</button>
+                <!-- Modal -->
+                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+                     aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận cập nhật khóa mới</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Form để gửi yêu cầu POST -->
+                            <form id="updateKeyForm" action="ReportKey" method="get">
+                                <div class="modal-body">
+                                    Bạn có muốn cập nhật khóa mới?
+
+                                    <input type="hidden" name="userId" value="${user.idUser}">
+                                    <input type="hidden" name="userEmail" value="${user.email}">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <!-- Sử dụng button submit để gửi form -->
+<%--                                    <a href="personalUser">--%>
+                                        <button type="submit" form="updateKeyForm" class="btn btn-primary">
+                                            Đồng ý
+                                        </button>
+<%--                                    </a>--%>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div id="successMessage" class="alert alert-success" role="alert"
+                     style="<%=(existEmail != null && existEmail) ? "" : "display: none;" %>">
+                    Private key đã được gửi tới email của bạn.
+                </div>
+
+                <div id="errorMessage" class="alert alert-danger" role="alert"
+                     style="<%=(existEmail != null && !existEmail) ? "" : "display: none;" %>">
+                    Không tìm thấy địa chỉ email.
                 </div>
             </div>
         </div>
@@ -269,6 +325,23 @@
 <script src="js\plugins.js"></script>
 <!-- Main activaion js -->
 <script src="js\main.js"></script>
+<script>
+    window.onload = function () {
+        if ("<%= existEmail %>" === "true") {
+            setTimeout(function () {
+                $("#successMessage").hide();
+            }, 4000); // Ẩn sau 3 giây
+        } else {
+            setTimeout(function () {
+                $("#errorMessage").hide();
+            }, 4000); // Ẩn sau 3 giây
+        }
+    }
+
+    function showConfirmationPopup() {
+        $('#confirmationModal').modal('show');
+    }
+</script>
 </body>
 
 </html>
