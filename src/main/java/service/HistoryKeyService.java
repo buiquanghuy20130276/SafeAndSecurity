@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class HistoryKeyService {
 
-    public static void insertKey(String publickey,String idUser) {
+    public static void insertKey(String idUser,String publickey) {
         PreparedStatement ps = null;
         try {
             String sql = "insert into `history_key`values (?,?,?,?)";
