@@ -13,6 +13,9 @@ import java.util.Random;
 public class AddOrUpdateProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         String action = request.getParameter("action");
         String id = request.getParameter("id");
         String name = request.getParameter("productname");

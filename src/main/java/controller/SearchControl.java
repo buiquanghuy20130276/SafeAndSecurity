@@ -21,8 +21,9 @@ public class SearchControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
     String txtSearch = request.getParameter("txt");
     List<Product> list = ProductService.searchByName(txtSearch);
         int page,show=12;

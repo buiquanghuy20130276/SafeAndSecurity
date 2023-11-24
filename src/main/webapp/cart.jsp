@@ -9,7 +9,7 @@
 <%--@elvariable id="cart" type="model.Cart"--%>
 
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html >
 
 <head>
     <meta charset="utf-8">
@@ -77,7 +77,7 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <!-- Form Start -->
-                    <form action="UpdateCart" method="get">
+                    <form action="UpdateCart" accept-charset="UTF-8" method="get">
                         <!-- Table Content Start -->
                         <div class="table-content table-responsive mb-45">
                             <c:if test="${listCart.size()==0}">

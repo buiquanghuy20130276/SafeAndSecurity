@@ -13,6 +13,9 @@ import java.util.List;
 public class ListAbout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         List<About>listA= AboutService.getAll();
         request.setAttribute("listA",listA);
         request.getRequestDispatcher("admin/ManageMember.jsp").forward(request, response);

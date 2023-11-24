@@ -91,14 +91,14 @@
                                     <td>${p.quantity}</td>
                                     <td><img src="${p.image1}"></td>
                                     <td id="status">${p.status==1?"Đang bán":"Ngừng bán"}</td>
-                                    <td id="hide-nothide">
+                                    <td style="text-align: center" id="hide-nothide">
                                         <c:if test="${p.status ==1}">
-                                            <a class="text-hide text-primary" href="AddOrUpdateProduct?action=hide&id=${p.productID}"><span class="fas fa-eye-slash"></span> Ẩn</a></c:if>
+                                            <a class="btn btn-primary" type="button" href="AddOrUpdateProduct?action=hide&id=${p.productID}">Ẩn</a></c:if>
                                         <c:if test="${p.status ==0}">
-                                            <a class="text-nothide text-primary" href="AddOrUpdateProduct?action=show&id=${p.productID}"><span class="fas fa-eye"></span> Hiển thị</a></c:if>
+                                            <a class="btn btn-primary" href="AddOrUpdateProduct?action=show&id=${p.productID}"> Hiển thị</a></c:if>
                                     </td>
-                                    <td><a class="text-lock text-primary" href="AddOrUpdateProduct?action=getupdate&id=${p.productID}"><span class="fas fa-edit"></span> Chỉnh sửa</a></td>
-                                    <td><a class="text-danger"  href="AddOrUpdateProduct?action=delete&id=${p.productID}"><span class="far fa-window-close"></span> Xóa</a></td>
+                                    <td style="text-align: center"><a class= "btn btn-success" type="button" href="AddOrUpdateProduct?action=getupdate&id=${p.productID}"><span class="fas fa-edit"></span> Chỉnh sửa</a></td>
+                                    <td style="text-align: center"><a class="btn btn-danger" type="button"  href="AddOrUpdateProduct?action=delete&id=${p.productID}"> Xóa</a></td>
                                 </tr>
                                 </c:forEach>
                                 </tbody>

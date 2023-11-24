@@ -68,25 +68,6 @@ public class UserService {
         }
         return user;
     }
-    public static String getPublicKey(String id) {
-        PreparedStatement s = null;
-        String  publickey= "";
-        try {
-            String sql = "SELECT k.publickey FROM `user` u JOIN `public_key` k ON u.id_publickey = k.id WHERE u.id=?";
-            s = ConnectDB.connect(sql);
-            s.setString(1, id);
-            ResultSet rs = s.executeQuery();
-            rs.first();
-            publickey = rs.getString(1);
-            rs.close();
-            s.close();
-
-        } catch (ClassNotFoundException |
-                 SQLException e) {
-            e.printStackTrace();
-        }
-        return publickey;
-    }
 
     public static boolean existUserName(String uname) {
         PreparedStatement s = null;
@@ -288,7 +269,8 @@ public class UserService {
                         rs.getString(6),
                         rs.getString(7),
                         rs.getInt(8),
-                        rs.getString(9)
+                        rs.getString(9),
+                        rs.getString(10)
                 );
                 return user;
             }
@@ -331,6 +313,7 @@ public class UserService {
 //        System.out.println(
 //                checkUser("admin",MD5.getMd5("123"))
 //        );
-        System.out.println(getPublicKey("sdsdg"));
+//        System.out.println(getPublicKey("sdsdg"));
+        System.out.println(getUser("quanghuyfs").toString());;
     }
 }

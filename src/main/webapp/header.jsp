@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<% UserSession u = UserSession.getUS(session);
+<% UserSession u = UserSession.getUS((HttpSession) session);
     int role = u.getRole();
 %>
 <jsp:useBean id="cart" class="model.Cart" scope="session"></jsp:useBean>
@@ -170,18 +170,18 @@
                 </div>
             </div>
             <!-- Slider Area Start Here -->
-            <div class="col-xl-9 col-lg-8 slider_box">
-                <div class="slider-wrapper theme-default">
-                    <!-- Slider Background  Image Start-->
-                    <div id="slider" class="nivoSlider">
-                        <a href="ProductLists?page=1"><img src="img\slider\banner-the.png" data-thumb="img/slider/1.jpg"
-                                                           alt="" title="#htmlcaption"></a>
-                        <a href="ProductLists?page=1"><img src="img\slider\image2.jpg" data-thumb="img/slider/2.jpg"
-                                                           alt="" title="#htmlcaption2"></a>
-                    </div>
-                    <!-- Slider Background  Image Start-->
-                </div>
-            </div>
+<%--            <div class="col-xl-9 col-lg-8 slider_box">--%>
+<%--                <div class="slider-wrapper theme-default">--%>
+<%--                    <!-- Slider Background  Image Start-->--%>
+<%--                    <div id="slider" class="nivoSlider">--%>
+<%--                        <a href="ProductLists?page=1"><img src="img\slider\banner-the.png" data-thumb="img/slider/1.jpg"--%>
+<%--                                                           alt="" title="#htmlcaption"></a>--%>
+<%--                        <a href="ProductLists?page=1"><img src="img\slider\image2.jpg" data-thumb="img/slider/2.jpg"--%>
+<%--                                                           alt="" title="#htmlcaption2"></a>--%>
+<%--                    </div>--%>
+<%--                    <!-- Slider Background  Image Start-->--%>
+<%--                </div>--%>
+<%--            </div>--%>
         </div>
     </div>
 </div>

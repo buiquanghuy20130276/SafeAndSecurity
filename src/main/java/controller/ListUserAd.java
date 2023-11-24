@@ -13,6 +13,9 @@ import java.util.List;
 public class ListUserAd extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         List<User> list = UserService.getAll();
         request.setAttribute("listUser", list);
         request.getRequestDispatcher("admin/ManageUser.jsp").forward(request, response);
