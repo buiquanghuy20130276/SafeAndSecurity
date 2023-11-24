@@ -18,6 +18,8 @@ import java.util.List;
 public class AddCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String id = request.getParameter("productID");
         Product p = ProductService.getById(id);
         HttpSession session = request.getSession();

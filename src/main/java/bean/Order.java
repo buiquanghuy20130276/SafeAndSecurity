@@ -2,6 +2,7 @@ package bean;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Order implements Serializable {
     private String orderID;
@@ -14,7 +15,8 @@ public class Order implements Serializable {
     private int status;
     private String createDate;
     private String updateDate;
-    private LinkedList<OrderDetail> orderDetails;
+    private String signature;
+    private List<OrderDetail> orderDetails;
 
     @Override
     public String toString() {
@@ -29,8 +31,19 @@ public class Order implements Serializable {
                 ", status=" + status +
                 ", createDate='" + createDate + '\'' +
                 ", updateDate='" + updateDate + '\'' +
+                ", signature='" + signature + '\'' +
                 ", orderDetails=" + orderDetails +
                 '}';
+    }
+
+    public Order(String orderID, String userID, String fullName, int totalPrice, String address, String phone, String email) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.fullName = fullName;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
     }
 
     public Order(String orderID, String userID, String fullName, int totalPrice, String address, String phone, String email, int status, String createDate, String updateDate) {
@@ -44,18 +57,38 @@ public class Order implements Serializable {
         this.status = status;
         this.createDate = createDate;
         this.updateDate = updateDate;
-        this.orderDetails= new LinkedList<>();
     }
+
+    public Order(String orderID, String userID, String fullName, int totalPrice, String address, String phone, String email, int status, String createDate, String updateDate, String signature) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.fullName = fullName;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.status = status;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+        this.signature = signature;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     public String getDataToSign(){
         StringBuilder data = new StringBuilder();
         data.append(orderID);
         data.append(userID);
-        data.append(fullName);
-        data.append(totalPrice);
         data.append(address);
+        data.append(totalPrice);
         data.append(phone);
         data.append(email);
-        data.append(status);
         data.append(createDate);
         data.append(updateDate);
 
@@ -66,7 +99,6 @@ public class Order implements Serializable {
                 data.append(detail.getNameProduct());
                 data.append(detail.getPriceProduct());
                 data.append(detail.getProductQuantity());
-                data.append(detail.getTotalPrice());
             }
         }
 
@@ -153,11 +185,11 @@ public class Order implements Serializable {
         this.updateDate = updateDate;
     }
 
-    public LinkedList<OrderDetail> getOrderDetails() {
+    public List<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
 
-    public void setOrderDetails(LinkedList<OrderDetail> orderDetails) {
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
     }
 }

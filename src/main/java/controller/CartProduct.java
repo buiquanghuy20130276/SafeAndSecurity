@@ -13,6 +13,8 @@ import java.util.Collection;
 public class CartProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         Cart c = (Cart) request.getSession().getAttribute("cart");
         if(c==null){
             response.sendRedirect("ProductLists");
