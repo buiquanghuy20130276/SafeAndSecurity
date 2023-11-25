@@ -119,6 +119,26 @@ public class OrderService {
             return null;
         }
     }
+    public static String getDateCreatedOrder(String idOder) {
+        PreparedStatement s = null;
+        String signature ="";
+        try {
+            String sql = "SELECT updateDate FROM `order` WHERE id=?;";
+            s = ConnectDB.connect(sql);
+            s.setString(1, idOder);
+            ResultSet rs = s.executeQuery();
+            if (rs.next()) {
+                signature = rs.getString(1);
+
+            }
+            rs.close();
+            s.close();
+            return signature;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public static void insertOrder(Order order){
         PreparedStatement ps = null;
         try{

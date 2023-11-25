@@ -12,6 +12,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "Order", value = "/ListOrder")
@@ -37,10 +38,14 @@ public class ListOrder extends HttpServlet {
                     request.setAttribute(o.getOrderID(), "true");
                 }
                 else{
+                    LocalDate createdOrder = LocalDate.parse(OrderService.getDateCreatedOrder(o.getOrderID()));
                     for (HistoryKey key: keys){
-                        if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(key.getPublickey()))) {
-                            request.setAttribute(o.getOrderID(), "true");
+                        if (createdOrder.isBefore(LocalDate.parse(key.getCreatedAt()) )||createdOrder.isEqual(LocalDate.parse(key.getCreatedAt()))){
+                            if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(key.getPublickey()))) {
+                                request.setAttribute(o.getOrderID(), "true");
+                            }
                         }
+
                     }
                 }
 
@@ -56,20 +61,23 @@ public class ListOrder extends HttpServlet {
     }
 
     public static void main(String[] args) throws Exception {
-        DSA dsa = new DSA();
-        List<Order> listOrder = OrderService.getAllOrder();
-        for (Order o : listOrder) {
+//        DSA dsa = new DSA();
+//        List<Order> listOrder = OrderService.getAllOrder();
+//        for (Order o : listOrder) {
+//
+//            o.setOrderDetails(OrderDetailService.getDetailOrder(o.getOrderID()));
+//            System.out.println(o.toString());
+//        }
+//        for (Order o : listOrder) {
+//            if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey("MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAYxmSOXXEqObHMQUpIIy0kVzgl+f4cS921BC6qG2Q9Y2x5pztHcBw58NL3qaxPoqBITZsLg+4DD1msxcTy27KaS6wLaM7kqnczl5x2vY1GZMs6r+2V8JGYwFWgSLPoNWOlN9nmYrmlxNCrPWtITFtPvKQJaL/MDTu422QnaVM7V4="))) {
+//                System.out.println("true");
+//            } else {
+//                System.out.println("false");
+//            }
+////            System.out.println(o.getDataToSign());
+//        }
+        LocalDate createdOrder = LocalDate.parse(OrderService.getDateCreatedOrder("order168416964711827"));
+        System.out.println(createdOrder.isBefore(LocalDate.parse("2023-11-26")));
 
-            o.setOrderDetails(OrderDetailService.getDetailOrder(o.getOrderID()));
-            System.out.println(o.toString());
-        }
-        for (Order o : listOrder) {
-            if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey("MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAYxmSOXXEqObHMQUpIIy0kVzgl+f4cS921BC6qG2Q9Y2x5pztHcBw58NL3qaxPoqBITZsLg+4DD1msxcTy27KaS6wLaM7kqnczl5x2vY1GZMs6r+2V8JGYwFWgSLPoNWOlN9nmYrmlxNCrPWtITFtPvKQJaL/MDTu422QnaVM7V4="))) {
-                System.out.println("true");
-            } else {
-                System.out.println("false");
-            }
-//            System.out.println(o.getDataToSign());
-        }
     }
 }
