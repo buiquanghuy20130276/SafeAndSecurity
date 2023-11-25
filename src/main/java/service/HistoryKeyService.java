@@ -37,7 +37,7 @@ public class HistoryKeyService {
         return listKey;
     }
 
-    public static void insertKey(String idUser, String publickey) {
+    public static void insertKey(String idUser,String publickey) {
         PreparedStatement ps = null;
         try {
             String sql = "insert into `history_key`values (?,?,?,?)";
