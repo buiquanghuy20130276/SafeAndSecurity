@@ -44,6 +44,8 @@ public class ListOrder extends HttpServlet {
                             if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(key.getPublickey()))) {
                                 request.setAttribute(o.getOrderID(), "true");
                             }
+                        }else{
+                            request.setAttribute(o.getOrderID(), "expired");
                         }
 
                     }

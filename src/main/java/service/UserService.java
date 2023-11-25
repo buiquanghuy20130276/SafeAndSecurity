@@ -84,29 +84,6 @@ public class UserService {
         }
         return user;
     }
-<<<<<<< HEAD
-=======
-    public static String getPublicKey(String id) {
-        PreparedStatement s = null;
-        String  publickey= "";
-        try {
-            //  "SELECT k.publickey FROM `user` u JOIN `public_key` k ON u.id_publickey = k.id WHERE u.id=?"
-            String sql = "SELECT publickey FROM `user` WHERE id=?";
-            s = ConnectDB.connect(sql);
-            s.setString(1, id);
-            ResultSet rs = s.executeQuery();
-            rs.first();
-            publickey = rs.getString(1);
-            rs.close();
-            s.close();
-
-        } catch (ClassNotFoundException |
-                 SQLException e) {
-            e.printStackTrace();
-        }
-        return publickey;
-    }
->>>>>>> 7079df79567442deb07204fffd9eaedca6816406
 
     public static String getPublicKey(String id) {
         PreparedStatement s = null;
