@@ -1,7 +1,9 @@
 package controller;
 
+import bean.HistoryKey;
 import bean.Order;
 import model.UserSession;
+import service.HistoryKeyService;
 import service.OrderDetailService;
 import service.OrderService;
 import tool.DSA;
@@ -18,7 +20,7 @@ public class ListOrder extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-
+        List<HistoryKey> keys = HistoryKeyService.getAllHistoryKey();
         HttpSession session = request.getSession();
         UserSession u = UserSession.getUS(session);
         DSA dsa = new DSA();
@@ -29,12 +31,18 @@ public class ListOrder extends HttpServlet {
             for (Order o : listOrder) {
                 o.setOrderDetails(OrderDetailService.getDetailOrder(o.getOrderID()));
             }
-//            System.out.println(u.getPublickey());
-            for (Order o : listOrder){
+            for (Order o : listOrder) {
 
-                    if(dsa.verifySignature(o.getDataToSign(),dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(u.getPublickey()))){
-                        request.setAttribute(o.getOrderID(),"true");
+                if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(u.getPublickey()))) {
+                    request.setAttribute(o.getOrderID(), "true");
+                }
+                else{
+                    for (HistoryKey key: keys){
+                        if (dsa.verifySignature(o.getDataToSign(), dsa.decodeFromBase64(o.getSignature()), dsa.stringToPublicKey(key.getPublickey()))) {
+                            request.setAttribute(o.getOrderID(), "true");
+                        }
                     }
+                }
 
             }
             request.setAttribute("listO", listOrder);
@@ -52,7 +60,7 @@ public class ListOrder extends HttpServlet {
         List<Order> listOrder = OrderService.getAllOrder();
         for (Order o : listOrder) {
 
-        o.setOrderDetails(OrderDetailService.getDetailOrder(o.getOrderID()));
+            o.setOrderDetails(OrderDetailService.getDetailOrder(o.getOrderID()));
             System.out.println(o.toString());
         }
         for (Order o : listOrder) {

@@ -132,9 +132,9 @@ public class OrderService {
             ps.setString(6, order.getPhone());
             ps.setString(7, order.getEmail());
             ps.setInt(8, order.getStatus());
-            ps.setDate(9, Date.valueOf(order.getCreateDate()));
-            ps.setDate(10, Date.valueOf(order.getUpdateDate()));
-            ps.setDate(11, null);
+            ps.setString(9, order.getCreateDate());
+            ps.setString(10,order.getUpdateDate());
+            ps.setString(11, null);
             ps.executeUpdate();
             ps.close();
 
@@ -198,9 +198,11 @@ public class OrderService {
 
     public static void main(String[] args) {
 //        deleteOrder("1324653113234");
-//        Order order = new Order("uidahf","user32915610645","unaghuy",45554545,"binhduong","134910843","@gmail");
-//        insertOrder(order);
-        System.out.println(getOrder("order308026691231982").toString());
+        Timestamp timestamp = new Timestamp(new java.util.Date().getTime());
+        String timeRegister = String.valueOf(timestamp);
+        Order order = new Order("uidahf","user32915610645","unaghuy",45554545,"binhduong","134910843","@gmail",0,timeRegister,timeRegister);
+        insertOrder(order);
+//        System.out.println(getOrder("order308026691231982").toString());
 //        System.out.println(Base64.getEncoder().encodeToString(getSignature("order308026691231982")));
     }
 }

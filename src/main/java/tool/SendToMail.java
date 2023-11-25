@@ -19,7 +19,7 @@ public class SendToMail {
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
         String email_Admin = "buiquanghuy0029a@gmail.com";
-        String user_Admin = "TrueMart gach men cao cap";
+        String user_Admin = "TrueMart Gạch men cao cấp";
         String password = "dkhlcpmfzykinshm";
         Session session = Session.getInstance(props,
                 new Authenticator() {
@@ -30,6 +30,7 @@ public class SendToMail {
 
         Message message = new MimeMessage(session);
         try {
+            message.setHeader("Content-Type", "text/plain; charset=UTF-8");
             message.setFrom(new InternetAddress(email_Admin, user_Admin));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(recipientEmail));
@@ -46,7 +47,7 @@ public class SendToMail {
     }
 
     public static void main(String[] args) {
-        SendToMail.sendEmail("quanghuy0029a@gmail.com","test","<button>click</button>");
+        SendToMail.sendEmail("quanghuy0029a@gmail.com","thông báo đặt hàng","<button>click</button>");
     }
 
 }

@@ -3,6 +3,7 @@ package service;
 import bean.Order;
 import bean.OrderDetail;
 import bean.Product;
+import bean.User;
 import controller.UpdateOrder;
 import database.ConnectDB;
 import tool.DSA;
@@ -77,6 +78,19 @@ public class OrderDetailService {
         PreparedStatement s = null;
         try {
             String sql = "update `order` set status = 1 where id = ?";
+            s = ConnectDB.connect(sql);
+            s.setString(1, id);
+            int rs = s.executeUpdate();
+            s.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void cancelOrder(String id) {
+        PreparedStatement s = null;
+        try {
+            String sql = "update `order` set status = 2 where id = ?";
             s = ConnectDB.connect(sql);
             s.setString(1, id);
             int rs = s.executeUpdate();
@@ -166,13 +180,13 @@ public class OrderDetailService {
 //        for (Order o : list){
 //            System.out.println(o.toString());
 //        }
-        Order order = OrderService.getOrder("order219309140920040");
-        order.setOrderDetails(getDetailOrder("order219309140920040"));
+        Order order = OrderService.getOrder("order450988267697304");
+//        User user = UserService.getByIdUser("user40906798262");
+        order.setOrderDetails(getDetailOrder("order450988267697304"));
         System.out.println(order.getDataToSign());
 //        order.setSignature(dsa.encodeToBase64(dsa.signData(order.getDataToSign(), dsa.stringToPrivateKey("MIIBSwIBADCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoEFgIUHG17oxZ/PqtBe5KIihzX4VuUtLs="))));
 //        System.out.println(order.getSignature());
-        System.out.println(dsa.verifySignature(order.getDataToSign(), dsa.decodeFromBase64(order.getSignature()), dsa.stringToPublicKey("MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAYxmSOXXEqObHMQUpIIy0kVzgl+f4cS921BC6qG2Q9Y2x5pztHcBw58NL3qaxPoqBITZsLg+4DD1msxcTy27KaS6wLaM7kqnczl5x2vY1GZMs6r+2V8JGYwFWgSLPoNWOlN9nmYrmlxNCrPWtITFtPvKQJaL/MDTu422QnaVM7V4=")));
-    //order105426654396020user92041998898binhduong1848000981722033quanghuy0029a@gmail.comnullnullsp009G?ch th? TA0312M1848001184800
+        System.out.println(dsa.verifySignature(order.getDataToSign(), dsa.decodeFromBase64(order.getSignature()), dsa.stringToPublicKey("MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAA5627DRZhlH7rnoNDpzGJjDl8HQTT12j0TsRfi0bpKA0T6IzBnQYzPYVQz2KAnXDSMYQqR8pLOPyLCrOjtd6mc+etbPeLKnlDoYQIYxCme8QmlLVoEwb6t9FjRFU3sX3cEeCd/6JoADAkM8eor1qpeqDgWBc2QSeVnbu3Xa5qGk=")));   //order105426654396020user92041998898binhduong1848000981722033quanghuy0029a@gmail.comnullnullsp009G?ch th? TA0312M1848001184800
         //order5307477933771user92041998898adsfasd240000+84981722033quanghuy0029a@gmail.comnullnullsp003Baked brick2400001240000
     }
 }

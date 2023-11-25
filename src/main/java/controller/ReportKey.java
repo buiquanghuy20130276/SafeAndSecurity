@@ -1,6 +1,7 @@
 package controller;
 
 import bean.User;
+import model.UserSession;
 import service.HistoryKeyService;
 import service.UserService;
 import tool.DSA;
@@ -21,6 +22,9 @@ public class ReportKey extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
+        UserSession u = (UserSession) req.getSession().getAttribute("user");
+        DSA dsa = new DSA();
+        User user = UserService.getUser(u.getUserName());
         String userId = req.getParameter("userId");
         String userEmail = req.getParameter("userEmail");
         DSA dsa = new DSA();
@@ -30,12 +34,12 @@ public class ReportKey extends HttpServlet {
         String publicKey = dsa.encodeToBase64(keyPair.getPublic().getEncoded());
         String privateKey = dsa.encodeToBase64(keyPair.getPrivate().getEncoded());
         //  gửi privateKey về email , email  này là của người dung
-        if (UserService.existEmail(userEmail)) {
+        if (user!=null) {
             user.setPublicKey(publicKey);
             // lưu lại public key cũ sao đó cập nhật public key mơi
-            HistoryKeyService.insertKey(userId, UserService.getPublicKey(userId));
-            UserService.updatePublicKey(userId, publicKey);
-            SendToMail.sendEmail(userEmail, "PrivateKey mới", privateKey);
+            HistoryKeyService.insertKey(user.getIdUser(), UserService.getPublicKey(user.getIdUser()));
+            UserService.updatePublicKey(user.getIdUser(), publicKey);
+            SendToMail.sendEmail(user.getEmail(), "PrivateKey mới", privateKey);
             req.setAttribute("existEmail",true);
         } else
             req.setAttribute("existEmail",false);
