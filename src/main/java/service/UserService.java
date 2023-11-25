@@ -40,7 +40,22 @@ public class UserService {
 
         return listUsers;
     }
+    public static boolean updatePublicKey(String userId,String publicKey) {
+        PreparedStatement preSta = null;
+        try {
+            String sql = "UPDATE user set publickey=? where id = ?";
+            preSta = ConnectDB.connect(sql);
+            preSta.setString(1, publicKey);
+            preSta.setString(2,userId);
+            int rs = preSta.executeUpdate();
+            preSta.close();
+            return true;
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
 
+    }
     public static User getByIdUser(String id) {
         PreparedStatement s = null;
         User user = null;
@@ -57,7 +72,8 @@ public class UserService {
                     rs.getString(6),
                     rs.getString(7),
                     rs.getInt(8),
-                    rs.getString(9)
+                    rs.getString(9),
+                    rs.getString(10)
             );
             rs.close();
             s.close();
@@ -69,6 +85,26 @@ public class UserService {
         return user;
     }
 
+    public static String getPublicKey(String id) {
+        PreparedStatement s = null;
+        String  publickey= "";
+        try {
+            //  "SELECT k.publickey FROM `user` u JOIN `public_key` k ON u.id_publickey = k.id WHERE u.id=?"
+            String sql = "SELECT publickey FROM `user` WHERE id=?";
+            s = ConnectDB.connect(sql);
+            s.setString(1, id);
+            ResultSet rs = s.executeQuery();
+            rs.first();
+            publickey = rs.getString(1);
+            rs.close();
+            s.close();
+
+        } catch (ClassNotFoundException |
+                 SQLException e) {
+            e.printStackTrace();
+        }
+        return publickey;
+    }
     public static boolean existUserName(String uname) {
         PreparedStatement s = null;
         try {

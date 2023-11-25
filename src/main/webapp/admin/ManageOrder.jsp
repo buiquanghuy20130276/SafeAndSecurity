@@ -91,8 +91,12 @@
                                                               value="${o.totalPrice}"/> VNĐ
                                         </td>
                                         <td>${o.createDate}</td>
-                                        <td id="orderstatus"><c:if test="${o.status ==1}">Đã xử lý</c:if>
-                                            <c:if test="${o.status ==0}">Chưa xử lý</c:if></td>
+                                        <td id="orderstatus">
+
+                                            <c:if test="${o.status ==1}">Đã xử lý</c:if>
+                                            <c:if test="${o.status ==2}">Đã hủy đơn</c:if>
+                                            <c:if test="${o.status ==0}">Chưa xử lý</c:if>
+                                        </td>
                                         <td style="text-align: center;">
                                             <c:choose>
                                                 <c:when test="${not empty requestScope[o.orderID] and requestScope[o.orderID] eq 'true'}">
@@ -104,11 +108,25 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td style="text-align: center"  id="rowupdate"><c:if test="${o.status ==1}"></c:if>
-                                            <c:if test="${o.status ==0}"><a type="button" class="btn btn-primary"
-                                                                            id="linkupdate"
-                                                                            href="UpdateOrder?action=update&id=${o.orderID}">
-                                                 Xử lý</a></c:if></td>
+                                        <td style="text-align: center"  id="rowupdate">
+                                            <c:choose>
+                                                <c:when test="${not empty requestScope[o.orderID] and requestScope[o.orderID] eq 'true'}">
+                                                    <c:if test="${o.status ==1}"></c:if>
+                                                    <c:if test="${o.status ==0}"><a type="button" class="btn btn-primary"
+                                                                                    id="linkupdate"
+                                                                                    href="UpdateOrder?action=update&id=${o.orderID}">
+                                                        Xử lý</a></c:if>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:if test="${o.status ==2}"></c:if>
+                                                    <c:if test="${o.status ==0}"><a type="button" class="btn btn-primary"
+                                                                                    id="linkupdate"
+                                                                                    href="UpdateOrder?action=cancel&id=${o.orderID}">
+                                                        Hủy đơn</a></c:if>
+                                                </c:otherwise>
+                                            </c:choose>
+
+                                        </td>
                                         <td style="text-align: center"><a type="button" class="btn btn-success"
                                                href="ListOrderDetailAd?id=${o.orderID}&fullName=${o.fullName}&address=${o.address}&phone=${o.phone}&createDate=${o.createDate}&total=${o.totalPrice}">
                                              Xem chi tiết</a></td>

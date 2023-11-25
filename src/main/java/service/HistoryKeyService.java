@@ -1,16 +1,43 @@
 package service;
 
+import bean.HistoryKey;
+import bean.Order;
 import database.ConnectDB;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class HistoryKeyService {
+    public static List<HistoryKey> getAllHistoryKey() {
+        List<HistoryKey> listKey = new LinkedList<>();
+        PreparedStatement pState = null;
+        String sql = "SELECT * FROM  history_key ";
+        try {
+            pState = ConnectDB.connect(sql);
+            ResultSet rs = pState.executeQuery();
+            while (rs.next()) {
+                HistoryKey key = new HistoryKey(rs.getInt(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4));
 
-    public static void insertKey(String publickey,String idUser) {
+                listKey.add(key);
+            }
+            rs.close();
+            pState.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        return listKey;
+    }
+
+    public static void insertKey(String idUser, String publickey) {
         PreparedStatement ps = null;
         try {
             String sql = "insert into `history_key`values (?,?,?,?)";
@@ -31,6 +58,7 @@ public class HistoryKeyService {
         }
 
     }
+
     public static boolean updateExpireDate(int id) {
         PreparedStatement preSta = null;
         Random rd = new Random();
@@ -39,7 +67,7 @@ public class HistoryKeyService {
             preSta = ConnectDB.connect(sql);
             preSta.setDate(1, Date.valueOf(LocalDate.now()));
             preSta.setInt(2, id);
-           int rs = preSta.executeUpdate();
+            int rs = preSta.executeUpdate();
             preSta.close();
             return true;
         } catch (SQLException | ClassNotFoundException e) {
@@ -51,6 +79,7 @@ public class HistoryKeyService {
     public static void main(String[] args) {
 //        insertKey("aldsfblasdf");
 //        updateExpireDate(625831059);
+
     }
 
 }

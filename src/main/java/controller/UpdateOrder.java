@@ -3,9 +3,11 @@ package controller;
 import bean.Order;
 import bean.OrderDetail;
 import bean.Product;
+import model.UserSession;
 import service.OrderDetailService;
 import service.OrderService;
 import service.ProductService;
+import tool.SendToMail;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -23,14 +25,24 @@ public class UpdateOrder extends HttpServlet {
 
         String action = request.getParameter("action");
         String id = request.getParameter("id");
-        if(action!=null){
-            if(action.equals("delete")){
+        if (action != null) {
+            if (action.equals("delete")) {
                 OrderDetailService.deleteOrderDetail(id);
                 OrderService.deleteOrder(id);
                 response.sendRedirect("ListOrder");
             }
-            if(action.equals("update")){
+            if (action.equals("update")) {
                 OrderDetailService.updateStatus(id);
+                response.sendRedirect("ListOrder");
+            }
+            if (action.equals("cancel")) {
+                OrderDetailService.cancelOrder(id);
+                UserSession u = (UserSession) request.getSession().getAttribute("user");
+                String subject = "Thông báo đặt hàng";
+                String content = "Cảm ơn bạn đã đặt hàng \n" +
+                        "Tôi rất tiếc khi phải thông báo rằng đơn hàng của bạn đã bị người khác chỉnh sửa thông tin, bạn có thể đặt hàng lại nhé! \n" +
+                        "cảm ơn bạn đã tin dùng sản phẩm của chúng tôi";
+                SendToMail.sendEmail(u.getEmail(), subject, content);
                 response.sendRedirect("ListOrder");
             }
         }
