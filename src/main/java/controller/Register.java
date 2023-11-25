@@ -74,7 +74,7 @@ public class Register extends HttpServlet {
                 request.setAttribute("msg", "Email này đã được đăng ký tài khoảng");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             } else if (UserService.register(user)) {
-                String subject = "Đăng ký tài khoản";
+                String subject = "Truemart register";
                 String message = "Đây là khóa bí mật của bạn, Vui lòng không ai biết thông tin về khóa này:\n" +privateKey;
                 SendToMail.sendEmail(email, subject, message);
                 request.getRequestDispatcher("/login.jsp").forward(request, response);

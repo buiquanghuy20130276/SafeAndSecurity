@@ -102,6 +102,9 @@
                                                 <c:when test="${not empty requestScope[o.orderID] and requestScope[o.orderID] eq 'true'}">
                                                     <span class="fa fa-check" style="font-size: 40px;color: green"></span>
                                                 </c:when>
+                                                <c:when test="${not empty requestScope[o.orderID] and requestScope[o.orderID] eq 'expired'}">
+                                                    Đã hết hạn
+                                                </c:when>
                                                 <c:otherwise>
                                                     <span class="fa fa-close"  style="font-size: 40px;color: red"></span>
 
@@ -116,6 +119,13 @@
                                                                                     id="linkupdate"
                                                                                     href="UpdateOrder?action=update&id=${o.orderID}">
                                                         Xử lý</a></c:if>
+                                                </c:when>
+                                                <c:when test="${not empty requestScope[o.orderID] and requestScope[o.orderID] eq 'expired'}">
+                                                    <c:if test="${o.status ==1}"></c:if>
+                                                    <c:if test="${o.status ==0}"><a type="button" class="btn btn-primary"
+                                                                                    id="linkupdate"
+                                                                                    href="UpdateOrder?action=expired&id=${o.orderID}">
+                                                        Thông báo</a></c:if>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <c:if test="${o.status ==2}"></c:if>

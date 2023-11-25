@@ -25,11 +25,6 @@ public class ReportKey extends HttpServlet {
         UserSession u = (UserSession) req.getSession().getAttribute("user");
         DSA dsa = new DSA();
         User user = UserService.getUser(u.getUserName());
-        String userId = req.getParameter("userId");
-        String userEmail = req.getParameter("userEmail");
-        DSA dsa = new DSA();
-        User user = new User();
-        user.setIdUser(userId);
         KeyPair keyPair = dsa.generateKeyPair();
         String publicKey = dsa.encodeToBase64(keyPair.getPublic().getEncoded());
         String privateKey = dsa.encodeToBase64(keyPair.getPrivate().getEncoded());
