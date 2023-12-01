@@ -16,6 +16,9 @@ public class UpdateReset extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         UserService UserService=new UserService();

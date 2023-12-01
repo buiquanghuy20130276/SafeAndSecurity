@@ -1,8 +1,12 @@
 package service;
 
+import bean.Order;
 import bean.OrderDetail;
 import bean.Product;
+import bean.User;
+import controller.UpdateOrder;
 import database.ConnectDB;
+import tool.DSA;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,6 +87,19 @@ public class OrderDetailService {
             e.printStackTrace();
         }
     }
+    public static void cancelOrder(String id) {
+        PreparedStatement s = null;
+        try {
+            String sql = "update `order` set status = 2 where id = ?";
+            s = ConnectDB.connect(sql);
+            s.setString(1, id);
+            int rs = s.executeUpdate();
+            s.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static String getIdOrder() {
@@ -96,18 +113,15 @@ public class OrderDetailService {
             rs.close();
             ps.close();
             return id;
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
             return null;
-        } catch (ClassNotFoundException classNotFoundException) {
-            classNotFoundException.printStackTrace();
-            return null;
         }
+
     }
 
-    public static void insertOrderDetail(List<Product> p) {
+    public static void insertOrderDetail(List<Product> p, String idOrder) {
         PreparedStatement ps = null;
-        String orderID = getIdOrder();
         try {
             String sql = "insert into order_detail values (?,?,?,?)";
             ps = ConnectDB.connect(sql);
@@ -115,7 +129,7 @@ public class OrderDetailService {
             for (int i = 0; i < p.size(); i++) {
                 Product product = p.get(i);
                 ps.setString(1, product.getProductID());
-                ps.setString(2, orderID);
+                ps.setString(2, idOrder);
                 ps.setInt(3, product.getQuantityCart());
                 ps.setInt(4, ((int) (product.getPriceAfterSale() * product.getQuantityCart())));
                 ps.executeUpdate();
@@ -141,6 +155,7 @@ public class OrderDetailService {
             e.printStackTrace();
         }
     }
+
     public static void deleteHistory(String id) {
         PreparedStatement s = null;
         try {
@@ -155,26 +170,23 @@ public class OrderDetailService {
         }
     }
 
-    public static void main(String[] args) {
-//        System.out.println(getDetailOrder("13246531132342"));
-//        System.out.println(getIdOrder());
-//        Product p = new Product("sp35945", "Gạch bông F2118", "Gạch bông F2118 là sản phẩm gạch quen thuộc với người Việt Nam, được ứng dụng nhiều trong những không gian bếp, nhà vệ sinh, mảng miếng trang trí bởi tính thẩm mỹ, dễ phối màu, dễ lau " +
-//                "chùi bụi bẩn. Khi bạn cần gạch ốp bếp, gạch ốp lát trang trí không gian quán cafe, sapa, ốp lát nhà tắm thì gạch bông men sẽ là 1 lựa chọn đầy thú vị cho ngôi nhà của bạn.", "200x200", "Gạch lát nền, Gạch ốp tường", 358000, 47,
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-view.jpg",
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-map.jpg", 189, 1, 1, 1);
-//        Product p2 = new Product("sp31594", "Gạch bông F2118", "Gạch bông F2118 là sản phẩm gạch quen thuộc với người Việt Nam, được ứng dụng nhiều trong những không gian bếp, nhà vệ sinh, mảng miếng trang trí bởi tính thẩm mỹ, dễ phối màu, dễ lau " +
-//                "chùi bụi bẩn. Khi bạn cần gạch ốp bếp, gạch ốp lát trang trí không gian quán cafe, sapa, ốp lát nhà tắm thì gạch bông men sẽ là 1 lựa chọn đầy thú vị cho ngôi nhà của bạn.", "200x200", "Gạch lát nền, Gạch ốp tường", 358000, 47,
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-view.jpg",
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-map.jpg", 189, 1, 1, 1);
-//        Product p3 = new Product("sp15945", "Gạch bông F2118", "Gạch bông F2118 là sản phẩm gạch quen thuộc với người Việt Nam, được ứng dụng nhiều trong những không gian bếp, nhà vệ sinh, mảng miếng trang trí bởi tính thẩm mỹ, dễ phối màu, dễ lau " +
-//                "chùi bụi bẩn. Khi bạn cần gạch ốp bếp, gạch ốp lát trang trí không gian quán cafe, sapa, ốp lát nhà tắm thì gạch bông men sẽ là 1 lựa chọn đầy thú vị cho ngôi nhà của bạn.", "200x200", "Gạch lát nền, Gạch ốp tường", 358000, 47,
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-view.jpg",
-//                "https://khatra.com.vn/wp-content/uploads/2022/10/F2118-map.jpg", 189, 1, 1, 1);
-//        List<Product> list = new ArrayList<>();
-//        list.add(p);
-//        list.add(p2);
-//        list.add(p3);
-//        insertOrderDetail(list);
-            System.out.println(getDetailOrder("order178892416887043").toString());
+    public static void main(String[] args) throws Exception {
+//
+        DSA dsa = new DSA();
+//        List<Order> list= OrderService.getAllOrder();
+//        for (Order o: list){
+//            o.setOrderDetails(getDetailOrder(o.getOrderID()));
+//        }
+//        for (Order o : list){
+//            System.out.println(o.toString());
+//        }
+        Order order = OrderService.getOrder("order450988267697304");
+//        User user = UserService.getByIdUser("user40906798262");
+        order.setOrderDetails(getDetailOrder("order450988267697304"));
+        System.out.println(order.getDataToSign());
+//        order.setSignature(dsa.encodeToBase64(dsa.signData(order.getDataToSign(), dsa.stringToPrivateKey("MIIBSwIBADCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoEFgIUHG17oxZ/PqtBe5KIihzX4VuUtLs="))));
+//        System.out.println(order.getSignature());
+        System.out.println(dsa.verifySignature(order.getDataToSign(), dsa.decodeFromBase64(order.getSignature()), dsa.stringToPublicKey("MIIBtzCCASwGByqGSM44BAEwggEfAoGBAP1/U4EddRIpUt9KnC7s5Of2EbdSPO9EAMMeP4C2USZpRV1AIlH7WT2NWPq/xfW6MPbLm1Vs14E7gB00b/JmYLdrmVClpJ+f6AR7ECLCT7up1/63xhv4O1fnxqimFQ8E+4P208UewwI1VBNaFpEy9nXzrith1yrv8iIDGZ3RSAHHAhUAl2BQjxUjC8yykrmCouuEC/BYHPUCgYEA9+GghdabPd7LvKtcNrhXuXmUr7v6OuqC+VdMCz0HgmdRWVeOutRZT+ZxBxCBgLRJFnEj6EwoFhO3zwkyjMim4TwWeotUfI0o4KOuHiuzpnWRbqN/C/ohNWLx+2J6ASQ7zKTxvqhRkImog9/hWuWfBpKLZl6Ae1UlZAFMO/7PSSoDgYQAAoGAA5627DRZhlH7rnoNDpzGJjDl8HQTT12j0TsRfi0bpKA0T6IzBnQYzPYVQz2KAnXDSMYQqR8pLOPyLCrOjtd6mc+etbPeLKnlDoYQIYxCme8QmlLVoEwb6t9FjRFU3sX3cEeCd/6JoADAkM8eor1qpeqDgWBc2QSeVnbu3Xa5qGk=")));   //order105426654396020user92041998898binhduong1848000981722033quanghuy0029a@gmail.comnullnullsp009G?ch th? TA0312M1848001184800
+        //order5307477933771user92041998898adsfasd240000+84981722033quanghuy0029a@gmail.comnullnullsp003Baked brick2400001240000
     }
 }

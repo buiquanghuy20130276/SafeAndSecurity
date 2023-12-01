@@ -16,6 +16,9 @@ public class IndexProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        List<Product> list = ListProducts.getAllProduct();
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         List<Product>listNewProduct= ProductService.listNewProduct();
         List<Product>listBestSeller=ProductService.listBestSeller();
         List<Product>listHintForYou=ProductService.listHintForYou();

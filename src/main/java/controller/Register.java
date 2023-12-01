@@ -43,7 +43,8 @@ public class Register extends HttpServlet {
         KeyPair keyPair = dsa.generateKeyPair();
 
 
-        String publickey = dsa.encodeToBase64(keyPair.getPrivate().getEncoded());
+        String publickey = dsa.encodeToBase64(keyPair.getPublic().getEncoded());
+        String privateKey = dsa.encodeToBase64(keyPair.getPrivate().getEncoded());
         User user = new User();
         user.setIdUser("user" + rd.nextInt(1000000) + rd.nextInt(100000));
         user.setName(name);
@@ -55,7 +56,6 @@ public class Register extends HttpServlet {
         user.setIsAdmin(0);
         user.setPublicKey(publickey);
         user.setStatus(1);
-        UserService us = new UserService();
 
         try {
             if (name.equals("") || uname.equals("") || email.equals("") || pass.equals("")) {
@@ -74,8 +74,8 @@ public class Register extends HttpServlet {
                 request.setAttribute("msg", "Email này đã được đăng ký tài khoảng");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             } else if (UserService.register(user)) {
-                String subject = "Đăng ký tài khoản";
-                String message = "Đây là khóa bí mật của bạn, Vui lòng không ai biết thông tin về khóa này:\n" +publickey;
+                String subject = "Truemart register";
+                String message = "Đây là khóa bí mật của bạn, Vui lòng không ai biết thông tin về khóa này:\n" +privateKey;
                 SendToMail.sendEmail(email, subject, message);
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             } else {

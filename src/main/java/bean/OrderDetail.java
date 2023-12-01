@@ -19,6 +19,18 @@ public class OrderDetail implements Serializable {
         this.totalPrice = totalPrice;
     }
 
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "productID='" + productID + '\'' +
+                ", orderID='" + orderID + '\'' +
+                ", nameProduct='" + nameProduct + '\'' +
+                ", priceProduct=" + priceProduct +
+                ", productQuantity=" + productQuantity +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
+
     public String getProductID() {
         return productID;
     }
