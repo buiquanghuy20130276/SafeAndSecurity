@@ -39,11 +39,15 @@ public class UpdateOrder extends HttpServlet {
             if (action.equals("cancel")) {
                 OrderDetailService.cancelOrder(id);
                 UserSession u = (UserSession) request.getSession().getAttribute("user");
+
                 String subject = "Truemart Order";
 
                 SendToMail.sendEmail(u.getEmail(), subject, Template.getCancelOrderHtml());
+           
+                
                 response.sendRedirect("ListOrder");
             }
+
             if (action.equals("expired")) {
                 UserSession u = (UserSession) request.getSession().getAttribute("user");
                 OrderDetailService.cancelOrder(id);
