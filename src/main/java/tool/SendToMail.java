@@ -30,12 +30,12 @@ public class SendToMail {
 
         Message message = new MimeMessage(session);
         try {
-            message.setHeader("Content-Type", "text/plain; charset=UTF-8");
+            message.setHeader("Content-Type", "text/html; charset=UTF-8");
             message.setFrom(new InternetAddress(email_Admin, user_Admin));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(recipientEmail));
             message.setSubject(subject);
-            message.setContent(textMessage, "text/plain; charset=UTF-8");
+            message.setContent(textMessage, "text/html; charset=UTF-8");
             message.setSentDate(new Date());
             Transport.send(message);
             System.out.println("Done");

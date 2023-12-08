@@ -8,6 +8,7 @@ import service.OrderDetailService;
 import service.OrderService;
 import service.ProductService;
 import tool.SendToMail;
+import tool.Template;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -39,18 +40,15 @@ public class UpdateOrder extends HttpServlet {
                 OrderDetailService.cancelOrder(id);
                 UserSession u = (UserSession) request.getSession().getAttribute("user");
                 String subject = "Truemart Order";
-                String content = "Cảm ơn bạn đã đặt hàng \n" +
-                        "Tôi rất tiếc khi phải thông báo rằng đơn hàng của bạn đã bị người khác chỉnh sửa thông tin, bạn có thể đặt hàng lại nhé! \n" +
-                        "cảm ơn bạn đã tin dùng sản phẩm của chúng tôi";
-                SendToMail.sendEmail(u.getEmail(), subject, content);
+
+                SendToMail.sendEmail(u.getEmail(), subject, Template.getCancelOrderHtml());
                 response.sendRedirect("ListOrder");
             }
             if (action.equals("expired")) {
                 UserSession u = (UserSession) request.getSession().getAttribute("user");
+                OrderDetailService.cancelOrder(id);
                 String subject = "Truemart Order";
-                String content = "Cảm ơn bạn đã đặt hàng \n" +
-                        "Tôi rất tiếc khi phải thông báo rằng private key của bạn đã hết hạn, vui lòng tạo key mới ở trang cá nhân";
-                SendToMail.sendEmail(u.getEmail(), subject, content);
+                SendToMail.sendEmail(u.getEmail(), subject, Template.getExpiredKeyHtml());
                 response.sendRedirect("ListOrder");
             }
         }

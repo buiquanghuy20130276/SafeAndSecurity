@@ -6,6 +6,7 @@ import service.HistoryKeyService;
 import service.UserService;
 import tool.DSA;
 import tool.SendToMail;
+import tool.Template;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +35,7 @@ public class ReportKey extends HttpServlet {
             // lưu lại public key cũ sao đó cập nhật public key mơi
             HistoryKeyService.insertKey(user.getIdUser(), UserService.getPublicKey(user.getIdUser()));
             UserService.updatePublicKey(user.getIdUser(), publicKey);
-            SendToMail.sendEmail(user.getEmail(), "PrivateKey mới", privateKey);
+            SendToMail.sendEmail(user.getEmail(), "TrueMart thông báo", Template.getReprotKeyHtml(privateKey));
             req.setAttribute("existEmail",true);
         } else
             req.setAttribute("existEmail",false);
