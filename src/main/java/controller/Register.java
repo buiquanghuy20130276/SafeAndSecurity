@@ -5,6 +5,7 @@ import service.UserService;
 import tool.DSA;
 import tool.MD5;
 import tool.SendToMail;
+import tool.Template;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -76,7 +77,7 @@ public class Register extends HttpServlet {
             } else if (UserService.register(user)) {
                 String subject = "Truemart register";
                 String message = "Đây là khóa bí mật của bạn, Vui lòng không ai biết thông tin về khóa này:\n" +privateKey;
-                SendToMail.sendEmail(email, subject, message);
+                SendToMail.sendEmail(email, subject, Template.getKeyHtml(privateKey));
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             } else {
                 request.setAttribute("msg", "Tạo tài khoản thất bại.<br> Hãy thử lại!!!");
